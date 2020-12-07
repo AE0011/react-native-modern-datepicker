@@ -4,11 +4,11 @@ import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import {useCalendar} from '../DatePicker';
 
 const Days = () => {
-  const {options, state, utils, onDateChange} = useCalendar();
+  const {options, today, markedDates, state, utils, onDateChange} = useCalendar();
   const [mainState, setMainState] = state;
   const [itemSize, setItemSize] = useState(0);
   const style = styles(options);
-  const days = useMemo(() => utils.getMonthDays(mainState.activeDate));
+  const days = useMemo(() => utils.getMonthDays(mainState.activeDate, markedDates));
 
   const onSelectDay = date => {
     setMainState({
@@ -36,8 +36,9 @@ const Days = () => {
             <TouchableOpacity
               style={[
                 style.dayItem,
+                day.isMarked && style.markSquare,
                 {
-                  borderRadius: itemSize / 2,
+                  borderRadius: (day.isMarked && mainState.selectedDate !== day.date) ? 0 : itemSize / 2,
                 },
                 mainState.selectedDate === day.date && style.dayItemSelected,
               ]}
@@ -46,6 +47,7 @@ const Days = () => {
               <Text
                 style={[
                   style.dayText,
+                  today === day.date && style.todayText,
                   mainState.selectedDate === day.date && style.dayTextSelected,
                   day.disabled && style.dayTextDisabled,
                 ]}>
@@ -86,9 +88,16 @@ const styles = theme =>
       color: theme.selectedTextColor,
       fontFamily: theme.headerFont,
     },
+    todayText: {
+      color: theme.todayTextColor,
+      fontFamily: theme.headerFont,
+    },
     dayTextDisabled: {
       opacity: 0.2,
     },
+    markSquare: {
+      backgroundColor: theme.markColor,
+    }
   });
 
 export {Days};
