@@ -160,7 +160,7 @@ class utils {
     return validDate;
   };
 
-  getMonthDays = (time) => {
+  getMonthDays = (time, markedDates) => {
     const {minimumDate, maximumDate, isGregorian} = this.data;
     let date = this.getDate(time);
     const currentMonthDays = isGregorian
@@ -181,11 +181,14 @@ class utils {
         }
 
         date = this.getDate(time);
+        let date2 = this.getFormated(isGregorian ? date.date(n + 1) : date.jDate(n + 1));
+        let index = markedDates.findIndex(markedDate => markedDate === date2);
         return {
           dayString: this.toPersianNumber(n + 1),
           day: n + 1,
-          date: this.getFormated(isGregorian ? date.date(n + 1) : date.jDate(n + 1)),
+          date: date2,
           disabled,
+          isMarked: index >= 0,
         };
       }),
     ];
