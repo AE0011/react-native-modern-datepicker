@@ -14,6 +14,7 @@ const Header = ({changeMonth}) => {
     maximumDate,
     isGregorian,
     mode,
+    onMonthYearChange,
   } = useCalendar();
   const [mainState, setMainState] = state;
   const style = styles(options);
@@ -42,6 +43,7 @@ const Header = ({changeMonth}) => {
       type: 'set',
       activeDate: utils.getFormated(newDate),
     });
+    onMonthYearChange(utils.getFormated(newDate, 'monthYearFormat'));
     changeMonth(type);
   };
 
